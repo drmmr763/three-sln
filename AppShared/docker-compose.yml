@@ -1,0 +1,11 @@
+version: '3'
+services:
+  sqlserver:
+    build:
+      context: .
+      dockerfile: SqlServer/SqlServer.Dockerfile
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "<YourStrong@Passw0rd>"
+    ports:
+      - 1433:1433
