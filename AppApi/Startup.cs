@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AppShared;
 using AppShared.Entities;
+using AppShared.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,12 @@ namespace AppApi
         {
             services.AddControllers();
             
+            var dbConfig = Configuration.GetSection("Database");
+            services.Configure<DatabaseConfig>(dbConfig);
+            
+            services.AddDbContext<EntityContext>();
+            services.AddTransient<CandidateRepository>();
+
             // api documentation - swagger
             services.AddSwaggerDocument();
         }
