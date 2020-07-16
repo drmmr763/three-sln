@@ -17,7 +17,7 @@ namespace AppShared
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var settings = config.Build();
-                    config.AddAzureAppConfiguration(settings["ConnectionStrings:ApiAppConfig"]);
+                    config.AddAzureAppConfiguration("Endpoint=https://apiappconfig.azconfig.io;Id=Yb+o-l0-s0:3rrmLMDiRoY0XSTUkuay;Secret=BV5ET9lq7Bkxj3NrgDQ0ZlxWQsazvrtU91Y+4aYHLw4=");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
