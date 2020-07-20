@@ -4,8 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace AppApi
 {
@@ -21,7 +25,12 @@ namespace AppApi
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var settings = config.Build();
-                    config.AddAzureAppConfiguration(settings["ConnectionStrings:ApiAppConfig"]);
+                    
+                    config.AddAzureAppConfiguration(config =>
+                    {
+                        config.Connect(settings["ConnectionStrings:ApiAppConfig"])
+                            .Select(KeyFilter.Any, settings["Environment"]);
+                    });
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

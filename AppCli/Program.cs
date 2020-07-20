@@ -6,6 +6,7 @@ using AppShared.Entities;
 using AppShared.Repositories;
 using CliFx;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.FeatureManagement;
@@ -52,7 +53,12 @@ namespace AppCli
             
             // build the config, load azure app config and then set the build config builder for DI
             var settings = config.Build();
-            var result   = config.AddAzureAppConfiguration(settings["ConnectionStrings:ApiAppConfig"]).Build();
+            var result   = config.AddAzureAppConfiguration(config =>
+            {
+                config.Connect(settings["ConnectionStrings:ApiAppConfig"])
+                    .Select(KeyFilter.Any, settings["Environment"]);
+                
+            }).Build();
             
             Configuration = result;
             

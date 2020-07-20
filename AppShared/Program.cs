@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Hosting;
 
 namespace AppShared
@@ -17,7 +18,12 @@ namespace AppShared
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var settings = config.Build();
-                    config.AddAzureAppConfiguration(settings["ConnectionStrings:ApiAppConfig"]);
+                    
+                    config.AddAzureAppConfiguration(config =>
+                    {
+                        config.Connect(settings["ConnectionStrings:ApiAppConfig"])
+                            .Select(KeyFilter.Any, settings["Environment"]);
+                    });
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
